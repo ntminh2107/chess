@@ -19,7 +19,7 @@ public class Pawn extends ChessPiece {
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
-        int forwardDirection = (getColor() == Color.WHITE) ? -1 : 1;
+        int forwardDirection = (getColor() == Color.WHITE) ? 1 : -1;
 
         // Kiểm tra nước đi có hợp lệ theo hướng tiến của quân tốt
         if (toCol == getCol() && toRow == getRow() + forwardDirection && chessBoard.getPiece(toRow, toCol) == null) {

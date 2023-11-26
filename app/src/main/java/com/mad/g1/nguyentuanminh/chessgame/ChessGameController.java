@@ -35,26 +35,6 @@ public class ChessGameController {
         }
 
 
-    public void updateChessboardUI() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                SquareView squareView = chessBoard.getSquareView(row, col);
-                Log.d("debug","row" + row +" " +"col" + col);
-                ChessPiece chessPiece = chessBoard.getPiece(row, col);
-
-                if (chessPiece != null) {
-                    // Update the SquareView with the new ChessPiece
-                    squareView.setChessPiece(chessPiece);
-                } else {
-                    // Clear the SquareView if there is no ChessPiece at this position
-                    squareView.setChessPiece(null);
-                }
-
-                // Clear any highlights from the SquareView
-            }
-        }
-    }
-
     public void switchTurns() {
         // Switch the turn to the other player
         currentPlayerTurn = (currentPlayerTurn == PLAYER_WHITE) ? PLAYER_BLACK : PLAYER_WHITE;

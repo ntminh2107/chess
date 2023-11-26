@@ -1,5 +1,7 @@
 package com.mad.g1.nguyentuanminh.chessgame;
 
+import android.util.Log;
+
 import com.mad.g1.nguyentuanminh.chessgame.model.Bishop;
 import com.mad.g1.nguyentuanminh.chessgame.model.ChessPiece;
 import com.mad.g1.nguyentuanminh.chessgame.model.King;
@@ -113,7 +115,9 @@ public class ChessBoard {
                 board[7][col] = new King(ChessPiece.Type.KING,ChessPiece.Color.BLACK,R.drawable.white_king,7,col);
             }
             board[6][col] = new Pawn(ChessPiece.Type.PAWN,ChessPiece.Color.WHITE, R.drawable.white_pawn,6,0);
+
         }
+        System.out.println(toString());
         }
 
     public void setSquareViews(SquareView[][] squareViews) {
@@ -125,6 +129,7 @@ public class ChessBoard {
         ChessPiece pieceToMove = getPiece(fromRow, fromCol);
         if(pieceToMove !=null && pieceToMove.isValidMove(toRow,toCol,this))
         {
+            System.out.println("run" + toCol +" "+ toRow);
             pieceToMove.move(toRow,toCol,this);
             setPiece(toRow, toCol, pieceToMove);
             setPiece(fromRow, fromCol, null);
@@ -134,14 +139,6 @@ public class ChessBoard {
             squareViews[fromRow][fromCol].setChessPiece(null);
         }
 
-    }
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (ChessPiece[] row : board) {
-            stringBuilder.append(Arrays.toString(row)).append("\n");
-        }
-        return stringBuilder.toString();
     }
 
     public SquareView getSquareView(int row, int col) {
@@ -167,4 +164,12 @@ public class ChessBoard {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (ChessPiece[] row : board) {
+            stringBuilder.append(Arrays.toString(row)).append("\n");
+        }
+        return stringBuilder.toString();
+    }
 }

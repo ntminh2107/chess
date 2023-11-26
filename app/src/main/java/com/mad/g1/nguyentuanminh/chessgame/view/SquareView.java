@@ -1,10 +1,8 @@
 package com.mad.g1.nguyentuanminh.chessgame.view;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,15 +11,12 @@ import android.widget.Toast;
 
 import com.mad.g1.nguyentuanminh.chessgame.ChessBoard;
 import com.mad.g1.nguyentuanminh.chessgame.ChessGameController;
-import com.mad.g1.nguyentuanminh.chessgame.R;
 import com.mad.g1.nguyentuanminh.chessgame.model.ChessPiece;
-
-import java.util.List;
 
 public class SquareView extends LinearLayout {
 
     private ImageView pieceImageView;
-    private ChessPiece piece;
+    private ChessPiece selectedPiece;
     private int row;
     private int col;
     private SquareTouchListener squareTouchListener;
@@ -82,37 +77,55 @@ public class SquareView extends LinearLayout {
 
     public void setChessPiece(ChessPiece chessPiece) {
         if (chessPiece != null) {
-            // Set the chess piece image
+            // Set the chess selectedPiece image
             int imageResourceId = chessPiece.getChessIMGid();
             if (imageResourceId != 0) {
                 pieceImageView.setImageResource(imageResourceId);
             }
         } else {
-            // No chess piece, clear the image
+            // No chess selectedPiece, clear the image
             pieceImageView.setImageDrawable(null);
         }
-        this.piece = chessPiece;
+        this.selectedPiece = chessPiece;
     }
 
     public void handleSquareTap() {
-        if (piece != null && squareTouchListener != null) {
-            // Log the coordinates of the tapped square
-            Log.d("ChessGame", "Tapped on square: " + row + ", " + col+ " " + piece.getType().toString());
-            // Notify the listener that the square was tapped
-            squareTouchListener.onSquareTapped(piece);
+        if (squareTouchListener != null) {
+            if (selectedPiece != null) {
+                // Log the coordinates of the tapped square
+                Log.d("ChessGame", "Tapped on square: " + row + ", " + col + " " + selectedPiece.getType().toString());
+                // Notify the listener that the square was tapped
+                squareTouchListener.onSquareTapped(selectedPiece);
+            } else {
+                // Log the coordinates of the tapped empty square
+                Log.d("ChessGame", "Tapped on empty square: " + row + " " + col);
+                // Notify the listener that the empty square was tapped
+                squareTouchListener.onSquareTapped(null);
+
+                // Check if the tapped position is valid using the isValidMove method of the selected selectedPiece
+                if (selectedPiece != null && selectedPiece.isValidMove(row, col, chessBoard)) {
+                    // Perform the move to the tapped position
+                    chessGameController.movePiece(selectedPiece.getRow(), selectedPiece.getCol(), row, col, chessBoard);
+                    chessBoard.updateUI();
+                } else {
+                    // Invalid move, display a message or handle it as needed
+                    Toast.makeText(getContext(), "Invalid move", Toast.LENGTH_SHORT).show();
+                }
+
+                // Clear the selected selectedPiece and move highlights
+                selectedPiece = null;
             }
-        else {
-            Log.d("ChessGame","Tapped on empty square: "+ row + " "+ col);
         }
-        }
+    }
+
 
     public interface SquareTouchListener {
         void onSquareTapped(ChessPiece piece);
     }
 
-    public ChessPiece getPiece()
+    public ChessPiece getSelectedPiece()
     {
-        return piece;
+        return selectedPiece;
     }
 
     public void setChessBoard(ChessBoard chessBoard) {
@@ -120,19 +133,12 @@ public class SquareView extends LinearLayout {
     }
 
     public void updateChessboardUI() {
-        // Clear all move highlights before updating the UI
-
         for (int row = 0; row < chessBoard.getRows(); row++) {
             for (int col = 0; col < chessBoard.getCols(); col++) {
                 SquareView squareView = chessBoard.getSquareView(row, col);
                 ChessPiece chessPiece = chessBoard.getPiece(row, col);
 
                 squareView.setChessPiece(chessPiece);
-
-                // Check if the piece has valid moves and highlight them
-                if (chessPiece != null && chessPiece == piece) {
-                    List<Pair<Integer, Integer>> validMoves = chessPiece.getValidMove(chessBoard);
-                }
             }
         }
     }
