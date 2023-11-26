@@ -99,7 +99,6 @@ public class PlayActivity extends AppCompatActivity {
             // No piece selected, highlight valid moves for the tapped piece
             selectedPiece = piece;
             List<Pair<Integer, Integer>> validMoves = piece.getValidMove(chessBoard);
-            squareView.highlightValidMoves(validMoves);
         } else {
             // A piece is selected, handle the tap based on the selected piece
             int toRow = squareView.getRow();
@@ -116,7 +115,6 @@ public class PlayActivity extends AppCompatActivity {
 
             // Clear the selected piece and move highlights
             selectedPiece = null;
-            squareView.clearHighlightForMove();
         }
     }
 

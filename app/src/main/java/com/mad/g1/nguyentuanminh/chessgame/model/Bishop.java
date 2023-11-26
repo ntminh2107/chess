@@ -18,4 +18,12 @@ public class Bishop extends ChessPiece {
         // The Bishop moves diagonally, so the row and column differences should be equal
         return rowDifference == colDifference;
     }
+
+    @Override
+    public void move(int toRow, int toCol, ChessBoard chessBoard) {
+        if (isValidMove(toRow, toCol, chessBoard)) {
+            setRow(toRow);
+            setCol(toCol);
+        }
+    }
 }

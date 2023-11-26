@@ -17,6 +17,7 @@ public class ChessBoard {
     private SquareView[][] squareViews = new SquareView[BOARD_SIZE][BOARD_SIZE];
     private int rows;
     private int cols;
+    private ChessGameController chessGameController;
 
     public int getRows() {
         return rows;
@@ -123,12 +124,31 @@ public class ChessBoard {
 
     public void movePiece(int fromRow, int fromCol, int toRow, int toCol) {
         ChessPiece pieceToMove = getPiece(fromRow, fromCol);
-        setPiece(toRow, toCol, pieceToMove);
-        setPiece(fromRow, fromCol, null);
 
-        // Update SquareViews after the move
-        squareViews[toRow][toCol].setChessPiece(pieceToMove);
-        squareViews[fromRow][fromCol].setChessPiece(null);
+        // Kiểm tra xem có quân cờ tại vị trí xuất phát không
+        if (pieceToMove != null) {
+            // Kiểm tra xem nước đi có hợp lệ không
+            if (pieceToMove.isValidMove(toRow, toCol, this)) {
+                // Thực hiện di chuyển quân cờ
+                pieceToMove.move(toRow, toCol, this);
+
+                // Di chuyển quân cờ trên bảng cờ
+                setPiece(toRow, toCol, pieceToMove);
+                setPiece(fromRow, fromCol, null);
+
+                // Cập nhật giao diện người dùng (nếu cần)
+                chessGameController.updateChessboardUI();
+
+                // Chuyển lượt
+                chessGameController.switchTurns();
+            } else {
+                // Nếu nước đi không hợp lệ, xử lý theo ý bạn (hiển thị thông báo, log, v.v.)
+                // TODO: Xử lý nước đi không hợp lệ
+            }
+        } else {
+            // Nếu không có quân cờ tại vị trí xuất phát, xử lý theo ý bạn (hiển thị thông báo, log, v.v.)
+            // TODO: Xử lý trường hợp không có quân cờ tại vị trí xuất phát
+        }
     }
     @Override
     public String toString() {

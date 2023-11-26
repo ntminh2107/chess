@@ -95,4 +95,12 @@ public class Queen extends ChessPiece {
 
         return validMoves;
     }
+
+    @Override
+    public void move(int toRow, int toCol, ChessBoard chessBoard) {
+        if (isValidMove(toRow, toCol, chessBoard)) {
+            setRow(toRow);
+            setCol(toCol);
+        }
+    }
 }

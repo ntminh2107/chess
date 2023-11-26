@@ -29,7 +29,7 @@ public class ChessGameController {
     {
         ChessPiece piece = chessBoard.getPiece(fromRow, fromCol);
             if(piece != null && piece.isValidMove(toRow,toCol,chessBoard)) {
-                chessBoard.movePiece(fromRow, fromCol, toRow, toCol);
+                chessBoard.movePiece(piece.getRow(), piece.getCol(), toRow, toCol);
                 switchTurns();
             }
         }
@@ -51,7 +51,6 @@ public class ChessGameController {
                 }
 
                 // Clear any highlights from the SquareView
-                squareView.clearHighlight();
             }
         }
     }

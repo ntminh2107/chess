@@ -7,10 +7,10 @@ import com.mad.g1.nguyentuanminh.chessgame.ChessBoard;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChessPiece {
+public abstract class ChessPiece {
 
 
-
+    public abstract void move(int toRow, int toCol, ChessBoard chessBoard);
 
     public enum Type {
         PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING
@@ -96,11 +96,6 @@ public class ChessPiece {
         this.col = col;
     }
 
-    public void move(int toRow, int toCol, ChessBoard chessBoard) {
-        // Basic implementation: set the new position
-        setRow(toRow);
-        setCol(toCol);
-    }
 
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard){
         return true;

@@ -21,14 +21,8 @@ public class Pawn extends ChessPiece {
         return (getColor() == Color.BLACK) ? STARTING_ROW_BLACK : STARTING_ROW_WHITE;
     }
 
-    @Override
-    public void move(int toRow, int toCol, ChessBoard chessBoard) {
-        if (isValidMove(toRow, toCol, chessBoard)) {
-            setRow(toRow);
-            setCol(toCol);
-        }
-    }
 
+    @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
         int forwardDirection = (getColor() == Color.WHITE) ? -1 : 1;
 
@@ -37,7 +31,7 @@ public class Pawn extends ChessPiece {
             return true;
         }
 
-        //check if move is valid forward 2 square
+        // Check if the move is a valid forward 2 squares from the starting row
         if (toCol == getCol() && Math.abs(toRow - getRow()) == 2 && getRow() == getStartingRow()) {
             int middleRow = (getRow() + toRow) / 2;
             if (chessBoard.getPiece(middleRow, getCol()) == null) {
@@ -48,12 +42,9 @@ public class Pawn extends ChessPiece {
         // Check if the move is a valid diagonal move for capturing
         if (Math.abs(toCol - getCol()) == 1 && toRow == getRow() + forwardDirection) {
             ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
-            if (destinationPiece != null && destinationPiece.getColor() != getColor()) {
-                return true;
-            }
+            return destinationPiece != null && destinationPiece.getColor() != getColor();
         }
 
-        // If none of the above conditions are met, the move is not valid
         return false;
     }
 
@@ -63,18 +54,18 @@ public class Pawn extends ChessPiece {
 
         int forwardDirection = (getColor() == Color.WHITE) ? -1 : 1;
 
-        // Check one square forward
+        // Kiểm tra một ô phía trước
         int oneSquareForward = getRow() + forwardDirection;
         if (isValidMove(oneSquareForward, getCol(), chessBoard)) {
             validMoves.add(new Pair<>(oneSquareForward, getCol()));
         }
 
-        // Check two squares forward from the starting row
+        // Kiểm tra hai ô phía trước từ hàng bắt đầu
         if (getRow() == getStartingRow() && isValidMove(oneSquareForward + forwardDirection, getCol(), chessBoard)) {
             validMoves.add(new Pair<>(oneSquareForward + forwardDirection, getCol()));
         }
 
-        // Check diagonally for capturing
+        // Kiểm tra chéo để bắt
         int leftDiagonal = getCol() - 1;
         int rightDiagonal = getCol() + 1;
 
@@ -89,10 +80,17 @@ public class Pawn extends ChessPiece {
         return validMoves;
     }
 
-
     private boolean isValidCapture(int toRow, int toCol, ChessBoard chessBoard) {
         ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
         return destinationPiece != null && destinationPiece.getColor() != getColor();
+    }
+
+    @Override
+    public void move(int toRow, int toCol, ChessBoard chessBoard) {
+        if (isValidMove(toRow, toCol, chessBoard)) {
+            setRow(toRow);
+            setCol(toCol);
+        }
     }
 }
 

@@ -16,12 +16,10 @@ public class Knight extends ChessPiece {
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
-        // Check if the move is a valid L-shaped move for a knight
-
         int rowDifference = Math.abs(toRow - getRow());
         int colDifference = Math.abs(toCol - getCol());
 
-        // The Knight moves in an L-shape: two squares in one direction and one square perpendicular
+        // Quân mã di chuyển theo hình L: hai ô theo một hướng và một ô theo hướng vuông góc
         return (rowDifference == 2 && colDifference == 1) || (rowDifference == 1 && colDifference == 2);
     }
 
@@ -29,7 +27,7 @@ public class Knight extends ChessPiece {
     public List<Pair<Integer, Integer>> getValidMove(ChessBoard chessBoard) {
         List<Pair<Integer, Integer>> validMoves = new ArrayList<>();
 
-        // Knight can move in an "L" shape: two squares in one direction and one square in a perpendicular direction
+        // Quân mã có thể di chuyển theo hình "L": hai ô theo một hướng và một ô theo hướng vuông góc
 
         int[] rowOffsets = {-2, -1, 1, 2, 2, 1, -1, -2};
         int[] colOffsets = {1, 2, 2, 1, -1, -2, -2, -1};
@@ -38,11 +36,11 @@ public class Knight extends ChessPiece {
             int newRow = getRow() + rowOffsets[i];
             int newCol = getCol() + colOffsets[i];
 
-            // Check if the move is within the board bounds
+            // Kiểm tra xem bước đi có nằm trong giới hạn của bàn cờ không
             if (newRow >= 0 && newRow < chessBoard.getRows() && newCol >= 0 && newCol < chessBoard.getCols()) {
                 ChessPiece destinationPiece = chessBoard.getPiece(newRow, newCol);
 
-                // Check if the destination square is empty or contains an opponent's piece
+                // Kiểm tra xem ô đích có trống không hoặc chứa quân cờ đối phương không
                 if (destinationPiece == null || destinationPiece.getColor() != getColor()) {
                     validMoves.add(new Pair<>(newRow, newCol));
                 }
@@ -50,6 +48,13 @@ public class Knight extends ChessPiece {
         }
 
         return validMoves;
+    }
+    @Override
+    public void move(int toRow, int toCol, ChessBoard chessBoard) {
+        if (isValidMove(toRow, toCol, chessBoard)) {
+            setRow(toRow);
+            setCol(toCol);
+        }
     }
 
 
