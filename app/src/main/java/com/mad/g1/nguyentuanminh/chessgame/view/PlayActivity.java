@@ -91,9 +91,6 @@ public class PlayActivity extends AppCompatActivity {
     }
 
 
-
-
-
     public void handleSquareTap(SquareView squareView, ChessPiece piece) {
         if (selectedPiece == null) {
             // No piece selected, highlight valid moves for the tapped piece

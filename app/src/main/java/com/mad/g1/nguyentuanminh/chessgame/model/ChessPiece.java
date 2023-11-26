@@ -10,6 +10,10 @@ import java.util.List;
 public abstract class ChessPiece {
 
 
+    public abstract boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard);
+
+    public abstract List<Pair<Integer, Integer>> getValidMove(ChessBoard chessBoard);
+
     public abstract void move(int toRow, int toCol, ChessBoard chessBoard);
 
     public enum Type {
@@ -94,16 +98,6 @@ public abstract class ChessPiece {
 
     public void setCol(int col) {
         this.col = col;
-    }
-
-
-    public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard){
-        return true;
-    }
-
-    public List<Pair<Integer, Integer>> getValidMove(ChessBoard chessBoard)
-    {
-        return new ArrayList<>();
     }
 
 }

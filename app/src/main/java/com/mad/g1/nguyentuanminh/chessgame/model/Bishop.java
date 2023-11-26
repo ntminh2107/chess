@@ -1,6 +1,10 @@
 package com.mad.g1.nguyentuanminh.chessgame.model;
 
+import android.util.Pair;
+
 import com.mad.g1.nguyentuanminh.chessgame.ChessBoard;
+
+import java.util.List;
 
 public class Bishop extends ChessPiece {
 
@@ -17,6 +21,11 @@ public class Bishop extends ChessPiece {
 
         // The Bishop moves diagonally, so the row and column differences should be equal
         return rowDifference == colDifference;
+    }
+
+    @Override
+    public List<Pair<Integer, Integer>> getValidMove(ChessBoard chessBoard) {
+        return null;
     }
 
     @Override

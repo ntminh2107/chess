@@ -101,6 +101,9 @@ public class SquareView extends LinearLayout {
             // Notify the listener that the square was tapped
             squareTouchListener.onSquareTapped(piece);
             }
+        else {
+            Log.d("ChessGame","Tapped on empty square: "+ row + " "+ col);
+        }
         }
 
     public interface SquareTouchListener {

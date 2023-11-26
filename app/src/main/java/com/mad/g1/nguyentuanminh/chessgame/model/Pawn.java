@@ -8,45 +8,47 @@ import java.util.List;
 
 public class Pawn extends ChessPiece {
 
-    private static final int STARTING_ROW_BLACK = 1;
-    private static final int STARTING_ROW_WHITE = 6;
 
 
     public Pawn(Type type, Color color, int chessIMGid, int row, int col) {
         super(Type.PAWN, color, chessIMGid, row, col);
     }
 
-    @Override
-    public int getStartingRow() {
-        return (getColor() == Color.BLACK) ? STARTING_ROW_BLACK : STARTING_ROW_WHITE;
-    }
+
 
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
         int forwardDirection = (getColor() == Color.WHITE) ? -1 : 1;
 
-        // Check if the move is a valid forward move
-        if (toCol == getCol() && toRow == getRow() + forwardDirection) {
+        // Kiểm tra nước đi có hợp lệ theo hướng tiến của quân tốt
+        if (toCol == getCol() && toRow == getRow() + forwardDirection && chessBoard.getPiece(toRow, toCol) == null) {
             return true;
         }
 
-        // Check if the move is a valid forward 2 squares from the starting row
-        if (toCol == getCol() && Math.abs(toRow - getRow()) == 2 && getRow() == getStartingRow()) {
-            int middleRow = (getRow() + toRow) / 2;
-            if (chessBoard.getPiece(middleRow, getCol()) == null) {
-                return true;
-            }
+        // Kiểm tra nước đi có hợp lệ khi quân tốt ở vị trí xuất phát và có thể di chuyển 2 ô
+        if (toCol == getCol() && Math.abs(toRow - getRow()) == 2 && getRow() == getStartingRow() &&
+                chessBoard.getPiece(toRow, toCol) == null &&
+                chessBoard.getPiece(getRow() + forwardDirection, toCol) == null) {
+            return true;
         }
 
-        // Check if the move is a valid diagonal move for capturing
+        // Kiểm tra nước đi có hợp lệ khi quân tốt ăn quân đối phương theo đường chéo
         if (Math.abs(toCol - getCol()) == 1 && toRow == getRow() + forwardDirection) {
             ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
             return destinationPiece != null && destinationPiece.getColor() != getColor();
         }
 
+        // Kiểm tra nước đi có hợp lệ khi quân tốt làm quân hậu sau khi di chuyển đến hàng cuối cùng
+        if (toCol == getCol() && toRow == getRow() + forwardDirection && chessBoard.getPiece(toRow, toCol) == null &&
+                (toRow == 0 || toRow == 7)) {
+            return true;
+        }
+
+        // Nếu không phải trường hợp nào trên, nước đi không hợp lệ
         return false;
     }
+
 
     @Override
     public List<Pair<Integer, Integer>> getValidMove(ChessBoard chessBoard) {

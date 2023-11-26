@@ -29,7 +29,7 @@ public class ChessGameController {
     {
         ChessPiece piece = chessBoard.getPiece(fromRow, fromCol);
             if(piece != null && piece.isValidMove(toRow,toCol,chessBoard)) {
-                chessBoard.movePiece(piece.getRow(), piece.getCol(), toRow, toCol);
+                chessBoard.movePiece(fromRow, fromCol, toRow, toCol);
                 switchTurns();
             }
         }
