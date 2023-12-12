@@ -15,13 +15,21 @@ public class King extends ChessPiece {
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
-        // Check if the move is a valid horizontal, vertical, or diagonal move for a king
+        // Kiểm tra xem ô đích có trống không
+        ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
+        if (destinationPiece != null) {
+            // Kiểm tra xem ô đích có chứa quân cờ đồng minh không
+            if (destinationPiece.getColor() == getColor()) {
+                return false; // Quân cờ đồng minh chặn, không hợp lệ
+            }
+        }
 
+        // Kiểm tra xem nước đi có theo đúng quy tắc của quân King không
         int rowDifference = Math.abs(toRow - getRow());
         int colDifference = Math.abs(toCol - getCol());
 
-        // The King can move one square in any direction, so check if the differences are at most 1
-        return (rowDifference <= 1 && colDifference <= 1);
+        // Nước đi tối đa 1 ô trong mọi hướng
+        return rowDifference <= 1 && colDifference <= 1;
     }
 
     @Override

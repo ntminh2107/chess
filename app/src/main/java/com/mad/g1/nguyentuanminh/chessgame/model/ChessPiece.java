@@ -10,18 +10,20 @@ import java.util.List;
 public abstract class ChessPiece {
 
 
-    public abstract boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard);
+    public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
+        return false;
+    }
 
     public abstract List<Pair<Integer, Integer>> getValidMove(ChessBoard chessBoard);
 
     public abstract void move(int toRow, int toCol, ChessBoard chessBoard);
 
     public enum Type {
-        PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING
+        PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING,NONE;
     }
 
     public enum Color {
-        BLACK, WHITE
+        BLACK, WHITE,EMPTY;
     }
 
     private Type type;
@@ -100,4 +102,6 @@ public abstract class ChessPiece {
         this.col = col;
     }
 
+    public ChessPiece() {
+    }
 }

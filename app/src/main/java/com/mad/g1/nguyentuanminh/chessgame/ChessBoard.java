@@ -1,9 +1,11 @@
 package com.mad.g1.nguyentuanminh.chessgame;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.mad.g1.nguyentuanminh.chessgame.model.Bishop;
 import com.mad.g1.nguyentuanminh.chessgame.model.ChessPiece;
+import com.mad.g1.nguyentuanminh.chessgame.model.EmptyPiece;
 import com.mad.g1.nguyentuanminh.chessgame.model.King;
 import com.mad.g1.nguyentuanminh.chessgame.model.Knight;
 import com.mad.g1.nguyentuanminh.chessgame.model.Pawn;
@@ -36,11 +38,28 @@ public class ChessBoard {
         this.cols = cols;
     }
 
-    public ChessBoard() {
-        // Initialize the chessboard with an 8x8 array of ChessPieces
+    public ChessBoard(Context context) {
+        // Khởi tạo bảng cờ và squareViews
         board = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
-        // You can customize the initialization based on your starting position.
-        // For now, let's assume an empty board.
+        squareViews = new SquareView[BOARD_SIZE][BOARD_SIZE];
+
+        // Khởi tạo giá trị rỗng cho tất cả ô trên bàn cờ và tạo SquareView tương ứng
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                board[row][col] = null;
+
+                // Tạo mới SquareView và thiết lập nó cho ô trên bàn cờ
+                SquareView squareView = new SquareView(context);
+                squareView.setRow(row);
+                squareView.setCol(col);
+
+                // Set up touch listener for each SquareView
+
+                squareViews[row][col] = squareView;
+
+                // ... (Thêm squareView vào layout của bạn)
+            }
+        }
     }
 
 
@@ -88,7 +107,7 @@ public class ChessBoard {
             {
                 board[0][col] = new King(ChessPiece.Type.KING,ChessPiece.Color.BLACK,R.drawable.black_king,0,col);
             }
-            board[1][col] = new Pawn(ChessPiece.Type.PAWN,ChessPiece.Color.BLACK, R.drawable.black_pawn,1,col);
+            board[1][col] = new Pawn(ChessPiece.Type.PAWN, ChessPiece.Color.BLACK,R.drawable.black_pawn,1,col);
         }
 
         // Example: Add black pawns to the seventh row
@@ -112,12 +131,20 @@ public class ChessBoard {
             }
             if(col == 4)
             {
-                board[7][col] = new King(ChessPiece.Type.KING,ChessPiece.Color.BLACK,R.drawable.white_king,7,col);
+                board[7][col] = new King(ChessPiece.Type.KING,ChessPiece.Color.WHITE,R.drawable.white_king,7,col);
             }
-            board[6][col] = new Pawn(ChessPiece.Type.PAWN,ChessPiece.Color.WHITE, R.drawable.white_pawn,6,0);
+            board[6][col] = new Pawn(ChessPiece.Type.PAWN, ChessPiece.Color.WHITE,R.drawable.white_pawn,6,0);
 
         }
         System.out.println(toString());
+        for(int row = 2; row<6;row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                board[row][col] = new EmptyPiece();
+            }
+        }
+
         }
 
     public void setSquareViews(SquareView[][] squareViews) {

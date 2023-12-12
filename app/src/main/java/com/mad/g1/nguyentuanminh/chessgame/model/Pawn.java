@@ -19,34 +19,33 @@ public class Pawn extends ChessPiece {
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
-        int forwardDirection = (getColor() == Color.WHITE) ? 1 : -1;
+        // Lấy thông tin về quân cờ ở ô đích
+        ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
 
-        // Kiểm tra nước đi có hợp lệ theo hướng tiến của quân tốt
-        if (toCol == getCol() && toRow == getRow() + forwardDirection && chessBoard.getPiece(toRow, toCol) == null) {
-            return true;
+        // Kiểm tra nếu ô đích là ô trống
+        if (destinationPiece instanceof EmptyPiece) {
+            // Xử lý nước đi cho quân tốt khi di chuyển vào ô trống
+            int direction = (getColor() == Color.BLACK) ? 1 : -1;
+
+            // Kiểm tra nếu di chuyển lên hoặc xuống một ô
+            if (toRow == getRow() + direction && toCol == getCol()) {
+                return true;
+            }
+
+            // Kiểm tra nếu quân tốt ở hàng ban đầu và có thể di chuyển hai ô
+            if (isStartingRow() && toRow == getRow() + 2 * direction && toCol == getCol()) {
+                // Kiểm tra xem có quân cờ nào ở ô giữa không
+                int middleRow = getRow() + direction;
+                ChessPiece middlePiece = chessBoard.getPiece(middleRow, getCol());
+                return middlePiece instanceof EmptyPiece;
+            }
+
+            // Nếu không phải các trường hợp trên, trả về false
+            return false;
+        } else {
+            // Nếu ô đích không phải là ô trống, xử lý kiểm tra nước đi ăn quân cờ
+            return super.isValidMove(toRow,toCol,chessBoard);
         }
-
-        // Kiểm tra nước đi có hợp lệ khi quân tốt ở vị trí xuất phát và có thể di chuyển 2 ô
-        if (toCol == getCol() && Math.abs(toRow - getRow()) == 2 && getRow() == getStartingRow() &&
-                chessBoard.getPiece(toRow, toCol) == null &&
-                chessBoard.getPiece(getRow() + forwardDirection, toCol) == null) {
-            return true;
-        }
-
-        // Kiểm tra nước đi có hợp lệ khi quân tốt ăn quân đối phương theo đường chéo
-        if (Math.abs(toCol - getCol()) == 1 && toRow == getRow() + forwardDirection) {
-            ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
-            return destinationPiece != null && destinationPiece.getColor() != getColor();
-        }
-
-        // Kiểm tra nước đi có hợp lệ khi quân tốt làm quân hậu sau khi di chuyển đến hàng cuối cùng
-        if (toCol == getCol() && toRow == getRow() + forwardDirection && chessBoard.getPiece(toRow, toCol) == null &&
-                (toRow == 0 || toRow == 7)) {
-            return true;
-        }
-
-        // Nếu không phải trường hợp nào trên, nước đi không hợp lệ
-        return false;
     }
 
 
@@ -54,29 +53,23 @@ public class Pawn extends ChessPiece {
     public List<Pair<Integer, Integer>> getValidMove(ChessBoard chessBoard) {
         List<Pair<Integer, Integer>> validMoves = new ArrayList<>();
 
-        int forwardDirection = (getColor() == Color.WHITE) ? -1 : 1;
+        int direction = (getColor() == Color.BLACK) ? 1 : -1;
 
-        // Kiểm tra một ô phía trước
-        int oneSquareForward = getRow() + forwardDirection;
-        if (isValidMove(oneSquareForward, getCol(), chessBoard)) {
-            validMoves.add(new Pair<>(oneSquareForward, getCol()));
+        // Kiểm tra di chuyển lên hoặc xuống một ô
+        int move1Row = getRow() + direction;
+        if (isValidPosition(move1Row, getCol()) && chessBoard.getPiece(move1Row, getCol()) instanceof EmptyPiece) {
+            validMoves.add(new Pair<>(move1Row, getCol()));
         }
 
-        // Kiểm tra hai ô phía trước từ hàng bắt đầu
-        if (getRow() == getStartingRow() && isValidMove(oneSquareForward + forwardDirection, getCol(), chessBoard)) {
-            validMoves.add(new Pair<>(oneSquareForward + forwardDirection, getCol()));
-        }
+        // Kiểm tra di chuyển hai ô từ hàng ban đầu
+        if (isStartingRow()) {
+            int move2Row = getRow() + 2 * direction;
+            int middleRow = getRow() + direction;
 
-        // Kiểm tra chéo để bắt
-        int leftDiagonal = getCol() - 1;
-        int rightDiagonal = getCol() + 1;
-
-        if (isValidCapture(oneSquareForward, leftDiagonal, chessBoard)) {
-            validMoves.add(new Pair<>(oneSquareForward, leftDiagonal));
-        }
-
-        if (isValidCapture(oneSquareForward, rightDiagonal, chessBoard)) {
-            validMoves.add(new Pair<>(oneSquareForward, rightDiagonal));
+            if (isValidPosition(move2Row, getCol()) && chessBoard.getPiece(move2Row, getCol()) instanceof EmptyPiece
+                    && chessBoard.getPiece(middleRow, getCol()) instanceof EmptyPiece) {
+                validMoves.add(new Pair<>(move2Row, getCol()));
+            }
         }
 
         return validMoves;
@@ -93,6 +86,12 @@ public class Pawn extends ChessPiece {
             setRow(toRow);
             setCol(toCol);
         }
+    }
+    private boolean isStartingRow() {
+        return (getColor() == Color.BLACK && getRow() == 1) || (getColor() == Color.WHITE && getRow() == 6);
+    }
+    private boolean isValidPosition(int row, int col) {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 }
 

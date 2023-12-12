@@ -16,10 +16,19 @@ public class Knight extends ChessPiece {
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
+        // Kiểm tra xem ô đích có trống không
+        ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
+        if (destinationPiece != null) {
+            // Kiểm tra xem ô đích có chứa quân cờ đồng minh không
+            if (destinationPiece.getColor() == getColor()) {
+                return false; // Quân cờ đồng minh chặn, không hợp lệ
+            }
+        }
+
+        // Kiểm tra xem nước đi có theo đúng quy tắc của quân Knight không
         int rowDifference = Math.abs(toRow - getRow());
         int colDifference = Math.abs(toCol - getCol());
 
-        // Quân mã di chuyển theo hình L: hai ô theo một hướng và một ô theo hướng vuông góc
         return (rowDifference == 2 && colDifference == 1) || (rowDifference == 1 && colDifference == 2);
     }
 

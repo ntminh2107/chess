@@ -14,12 +14,19 @@ public class Bishop extends ChessPiece {
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
-        // Check if the move is a valid diagonal move for a bishop
+        // Kiểm tra xem ô đích có trống không
+        ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
+        if (destinationPiece != null) {
+            // Kiểm tra xem ô đích có chứa quân cờ đồng minh không
+            if (destinationPiece.getColor() == getColor()) {
+                return false; // Quân cờ đồng minh chặn, không hợp lệ
+            }
+        }
 
+        // Kiểm tra xem nước đi có theo đúng quy tắc của quân Bishop không
         int rowDifference = Math.abs(toRow - getRow());
         int colDifference = Math.abs(toCol - getCol());
 
-        // The Bishop moves diagonally, so the row and column differences should be equal
         return rowDifference == colDifference;
     }
 

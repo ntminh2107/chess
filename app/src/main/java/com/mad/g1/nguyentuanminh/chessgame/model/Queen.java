@@ -16,13 +16,21 @@ public class Queen extends ChessPiece {
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
-        // Check if the move is a valid horizontal, vertical, or diagonal move for a queen
+        // Kiểm tra xem ô đích có trống không
+        ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
+        if (destinationPiece != null) {
+            // Kiểm tra xem ô đích có chứa quân cờ đồng minh không
+            if (destinationPiece.getColor() == getColor()) {
+                return false; // Quân cờ đồng minh chặn, không hợp lệ
+            }
+        }
 
+        // Kiểm tra xem nước đi có theo đúng quy tắc của quân Queen không
         int rowDifference = Math.abs(toRow - getRow());
         int colDifference = Math.abs(toCol - getCol());
 
-        // The Queen can move horizontally, vertically, or diagonally, so check all possibilities
-        return (getRow() == toRow || getCol() == toCol || rowDifference == colDifference);
+        // Nước đi theo hàng ngang, cột dọc hoặc đường chéo
+        return (rowDifference == 0 || colDifference == 0 || rowDifference == colDifference);
     }
 
     @Override

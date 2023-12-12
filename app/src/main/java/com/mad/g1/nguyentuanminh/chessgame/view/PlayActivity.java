@@ -31,11 +31,11 @@ public class PlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play);
         GridLayout chessboardLayout = findViewById(R.id.chessboardLayout);
         initializeChessboard(chessboardLayout);
-        chessGameController = new ChessGameController();
+        chessGameController = new ChessGameController(getApplicationContext());
     }
 
     private void initializeChessboard(GridLayout chessboardLayout) {
-        chessBoard = new ChessBoard();
+        chessBoard = new ChessBoard(getApplicationContext());
         chessBoard.initializeChessBoard();
         SquareView[][] squareViews = new SquareView[BOARD_SIZE][BOARD_SIZE];
 
@@ -106,7 +106,9 @@ public class PlayActivity extends AppCompatActivity {
 
             if (selectedPiece.isValidMove(toRow, toCol, chessBoard)) {
                 // Valid move, perform the move
-                chessGameController.movePiece(selectedPiece.getRow(), selectedPiece.getCol(), toRow, toCol, chessBoard);
+                chessBoard.movePiece(selectedPiece.getRow(), selectedPiece.getCol(), toRow, toCol);
+                // Update the selected piece after the move
+                selectedPiece = chessBoard.getPiece(toRow, toCol);
                 chessBoard.updateUI();
             } else {
                 // Invalid move, display a message or handle it as needed
@@ -117,5 +119,4 @@ public class PlayActivity extends AppCompatActivity {
             selectedPiece = null;
         }
     }
-
 }

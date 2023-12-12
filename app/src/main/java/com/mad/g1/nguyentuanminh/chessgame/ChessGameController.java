@@ -17,10 +17,9 @@ public class ChessGameController {
     private static final ChessPiece.Color PLAYER_BLACK = ChessPiece.Color.BLACK;
     private static final ChessPiece.Color PLAYER_WHITE = ChessPiece.Color.WHITE;
     private static int BOARD_SIZE = 8;
-    private Context context;
 
-    public ChessGameController() {
-        chessBoard = new ChessBoard();
+    public ChessGameController(Context context) {
+        chessBoard = new ChessBoard(context);
         chessBoard.initializeChessBoard();
         currentPlayerTurn = PLAYER_WHITE;
     }

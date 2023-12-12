@@ -102,18 +102,16 @@ public class SquareView extends LinearLayout {
                 // Notify the listener that the empty square was tapped
                 squareTouchListener.onSquareTapped(null);
 
-                // Check if the tapped position is valid using the isValidMove method of the selected selectedPiece
+                // Check if the tapped position is valid
                 if (selectedPiece != null && selectedPiece.isValidMove(row, col, chessBoard)) {
                     // Perform the move to the tapped position
-                    chessGameController.movePiece(selectedPiece.getRow(), selectedPiece.getCol(), row, col, chessBoard);
-                    chessBoard.updateUI();
+                    chessBoard.movePiece(selectedPiece.getRow(), selectedPiece.getCol(), row, col);
+                    // Update the selected piece after the move
+                    selectedPiece = chessBoard.getPiece(row, col);
                 } else {
                     // Invalid move, display a message or handle it as needed
                     Toast.makeText(getContext(), "Invalid move", Toast.LENGTH_SHORT).show();
                 }
-
-                // Clear the selected selectedPiece and move highlights
-                selectedPiece = null;
             }
         }
     }

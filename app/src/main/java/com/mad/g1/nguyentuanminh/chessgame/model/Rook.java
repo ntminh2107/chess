@@ -15,19 +15,20 @@ public class Rook extends ChessPiece {
 
     @Override
     public boolean isValidMove(int toRow, int toCol, ChessBoard chessBoard) {
-        // Check if the move is a valid horizontal or vertical move
-
-        // Horizontal move
-        if (toRow == getRow() && toCol != getCol()) {
-            return isPathClearHorizontal(toCol, chessBoard);
+        // Kiểm tra xem ô đích có trống không
+        ChessPiece destinationPiece = chessBoard.getPiece(toRow, toCol);
+        if (destinationPiece != null) {
+            // Kiểm tra xem ô đích có chứa quân cờ đồng minh không
+            if (destinationPiece.getColor() == getColor()) {
+                return false; // Quân cờ đồng minh chặn, không hợp lệ
+            }
         }
 
-        // Vertical move
-        if (toCol == getCol() && toRow != getRow()) {
-            return isPathClearVertical(toRow, chessBoard);
-        }
+        // Kiểm tra xem nước đi có theo đúng quy tắc của quân Rook không
+        int rowDifference = Math.abs(toRow - getRow());
+        int colDifference = Math.abs(toCol - getCol());
 
-        return false;
+        return rowDifference == 0 || colDifference == 0;
     }
 
     @Override
